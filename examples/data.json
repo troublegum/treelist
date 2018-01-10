@@ -1,0 +1,32 @@
+[
+    {
+        "label": "[node 1]",
+        "id": 100,
+        "clickable": true,
+        "isLeaf": false
+    },
+    {
+        "label": "[node 2]",
+        "id": 101,
+        "clickable": false,
+        "isLeaf": false
+    },
+    {
+        "label": "[node 3]",
+        "id": 102,
+        "clickable": true,
+        "isLeaf": false
+    },
+    {
+        "label": "node 4",
+        "id": 103,
+        "clickable": true,
+        "isLeaf": true
+    },
+    {
+        "label": "node 5",
+        "id": 104,
+        "clickable": true,
+        "isLeaf": true
+    }
+]

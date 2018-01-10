@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example 2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap styles -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- Tree list library -->
+        <script src="./../dist/treelist.js"></script>
+        <!-- Code example -->
+        <script>
+            $(document).ready(function () {
+                // config tree
+                var tl = new TreeList({
+                    container: "#tree",
+                    view: {
+                        branch: "<ul>{nodes}</ul>",
+                        node: "<li role='treeitem' data-id='{id}' data-is-leaf='{isLeaf}'><span>{label}</span></li>"
+                    },                    
+                    on: {
+                        beforeLoad: function (node) {
+                            console.log("Event beforeLoad. Node id: " + $(node).data("id"));
+                        },
+                        afterLoad: function (node) {
+                            console.log("Event afterLoad. Node id: " + $(node).data("id"));                            
+                        },
+                        click: function (node) {
+                            console.log("Event click. Node id: " + $(node).data("id"));
+                            if ($(node).data("isLeaf") == false) {
+                                var icon = $(node).find(">i");
+                                if ($(icon).hasClass("glyphicon-folder-close")) {
+                                    $(icon).removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");   
+                                    $(node).find(">ul").show();
+                                } else {
+                                    $(icon).removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");    
+                                    $(node).find(">ul").hide();
+                                }
+                            }
+                        },
+                        afterRender: function(target) {
+                            if ($(target).data("dataLoaded") === true) {
+                                return;
+                            }
+                            $(target).find('[role="treeitem"]').each(function (i, el) {
+                                if ($(el).data("isLeaf")) {
+                                    $(el).prepend("<i class='glyphicon glyphicon-file'></i> ");
+                                } else {
+                                    $(el).prepend("<i class='glyphicon glyphicon-folder-close'></i> ");
+                                }
+                            });
+                        }
+                    },
+                    url: "./data.json?parentId={nodeId}"
+                });
+
+                // init tree
+                tl.init();
+                
+                // Reset tree
+                $("#reset").click(function() {
+                   tl.remove();
+                   tl.init();
+                });
+            });
+        </script>         
+        <style>
+            body {
+                padding: 20px;
+            }
+            
+            ul > li[data-is-leaf="false"] > span {
+                cursor: pointer;
+            }
+           
+            li {
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body class="container">
+        <section>
+            <h1>Пример 2</h1>
+            <p>Пример с обработкой событий. См. консоль браузера.</p>
+            <h2>Конфигурация</h2>
+
+<pre>
+{
+    container: "#tree", // идентфикактор контейнера дерева
+    view: {
+        branch: "&lt;ul&gt;{nodes}&lt;/ul&gt;", // шаблон контейнера ветки
+        node: "&lt;li role='treeitem' data-id='{id}' data-is-leaf='{isLeaf}'&gt;&lt;span&gt;{label}&lt;/span&gt;&lt;/li&gt;" // шаблон контейнера узла
+    },
+    on: { // конфигурация обработчика событий
+        beforeLoad: function (node) {
+            console.log("Event beforeLoad. Node id: " + $(node).data("id"));
+        },
+        afterLoad: function (node) {
+            console.log("Event afterLoad. Node id: " + $(node).data("id"));                            
+        },
+        click: function (node) {
+            console.log("Event click. Node id: " + $(node).data("id"));
+            if ($(node).data("isLeaf") == false) {
+                var icon = $(node).find("&gti");
+                if ($(icon).hasClass("glyphicon-folder-close")) {
+                    $(icon).removeClass("glyphicon-folder-close").addClass("glyphicon-folder-open");   
+                    $(node).find("&gtul").show();
+                } else {
+                    $(icon).removeClass("glyphicon-folder-open").addClass("glyphicon-folder-close");    
+                    $(node).find("&gtul").hide();
+                }
+            }
+        },
+        afterRender: function(target) {
+            if ($(target).data("dataLoaded") === true) {
+                return;
+            }
+            $(target).find('[role="treeitem"]').each(function (i, el) {
+                if ($(el).data("isLeaf")) {
+                    $(el).prepend("&lt;i class='glyphicon glyphicon-file'&gt&lt;/i&gt ");
+                } else {
+                    $(el).prepend("&lt;i class='glyphicon glyphicon-folder-close'&gt&lt;/i&gt ");
+                }
+            });
+        }
+    },
+    url: "./data.json?parentId={nodeId}" // шаблон урла данных
+}
+</pre>
+        </section>
+        <h2>Пример дерева</h2>        
+        <!-- Tree list container -->
+        <div id="tree" role="tree"></div>
+        <!-- Reset tree button -->
+        <p><a class="btn btn-primary" id="reset">Сбросить</a></p>
+    </body>
+</html>
